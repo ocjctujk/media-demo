@@ -41,24 +41,28 @@ export class Tab1Page implements OnInit {
   fileTransfer: FileTransferObject = this.transfer.create();
 
   ngOnInit(): void {
-    if (!this.imagePicker.hasReadPermission()) {
-      this.imagePicker.requestReadPermission();
-    }
+    this.imagePicker.hasReadPermission().then((hasPermission) => {
+      if (!hasPermission) {
+        this.imagePicker.requestReadPermission();
+      }
+    });
   }
 
   onOpen() {
-    let images = this.images;
-    this.imagePicker.getPictures({}).then(
-      function (results) {
-        for (var i = 0; i < results.length; i++) {
-          images.push(Capacitor.convertFileSrc(results[i]));
-        }
-      },
-      function (error) {
-        console.log('Error: ' + error);
+    this.imagePicker.hasReadPermission().then((permission) => {
+      if (permission) {
+        this.imagePicker.getPictures({}).then(
+          (results) => {
+            for (var i = 0; i < results.length; i++) {
+              this.images.push(Capacitor.convertFileSrc(results[i]));
+            }
+          },
+          (error) => {
+            console.log('Error: ' + error);
+          }
+        );
       }
-    );
-    this.images = images;
+    });
   }
 
   onDownload() {
@@ -72,11 +76,12 @@ export class Tab1Page implements OnInit {
           alert('App is Offline, please turn on the data');
           return;
         }
-        this.downloadText = "Downloading Image....."
+
+        this.downloadText = 'Downloading Image.....';
         const uri =
           'https://file-examples.com/storage/fef12739526267ac9a2b543/2017/10/file_example_JPG_500kB.jpg';
         this.fileTransfer
-          .download(uri, this.file.externalRootDirectory + 'file.jpg', true)
+          .download(uri, this.file.dataDirectory + 'file.jpg', true)
           .then(
             (entry) => {
               this.downloadText = '';
@@ -91,6 +96,7 @@ export class Tab1Page implements OnInit {
               alert('Body' + error.body);
               alert('target' + error.target);
               alert('Http status' + error.http_status);
+              this.downloadText=''
             }
           );
       },
@@ -100,7 +106,7 @@ export class Tab1Page implements OnInit {
     );
   }
   setDownloadedImage() {
-    let imagePath = this.file.externalRootDirectory + 'file.jpg';
+    let imagePath = this.file.dataDirectory + 'file.jpg';
     this.downloadedImage = Capacitor.convertFileSrc(imagePath);
   }
 }
