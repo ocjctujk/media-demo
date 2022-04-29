@@ -68,16 +68,18 @@ export class Tab1Page implements OnInit {
         dataConnected = data.connected;
         // alert('Get status' + dataConnected);
         if (!dataConnected) {
-          alert('Data connected? ' + dataConnected);
-          alert('App is Offline');
+          console.log('Data connected? ' + dataConnected);
+          alert('App is Offline, please turn on the data');
           return;
         }
+        this.downloadText = "Downloading Image....."
         const uri =
           'https://file-examples.com/storage/fef12739526267ac9a2b543/2017/10/file_example_JPG_500kB.jpg';
         this.fileTransfer
           .download(uri, this.file.externalRootDirectory + 'file.jpg', true)
           .then(
             (entry) => {
+              this.downloadText = '';
               alert('Download Complete');
               console.log('Download complete' + entry.toURL());
               this.setDownloadedImage();

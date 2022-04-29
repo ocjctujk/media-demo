@@ -22,10 +22,12 @@
     <ion-row>
       <ion-col>
         <ion-button expand="block" (click)="onDownload()">Download</ion-button>
+        <ion-text>{{downloadText}}</ion-text>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
+        <ion-text *ngIf="downloadedImage">Downloaded Image</ion-text>
         <ion-img [src]="downloadedImage"></ion-img>
       </ion-col>
     </ion-row>
