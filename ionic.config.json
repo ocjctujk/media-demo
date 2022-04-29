@@ -1,7 +1,8 @@
 {
   "name": "Media Demo",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

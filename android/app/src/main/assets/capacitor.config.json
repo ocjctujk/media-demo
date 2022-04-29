@@ -1,0 +1,6 @@
+{
+	"appId": "io.maharshi.com",
+	"appName": "Media Demo",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
